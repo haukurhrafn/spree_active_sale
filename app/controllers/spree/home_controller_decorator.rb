@@ -7,10 +7,6 @@
       @searcher.current_currency = current_currency
       @sale_events = @searcher.retrieve_sales
       @taxonomies = Spree::Taxonomy.includes(root: :children)
-      if @sale_events.present?
-        respond_with(@sale_events)
-      else
-        @products = @searcher.retrieve_products.includes(:possible_promotions)
-      end
+      respond_with(@sale_events)
     end
   end

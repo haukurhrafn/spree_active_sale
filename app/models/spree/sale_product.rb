@@ -1,5 +1,8 @@
 module Spree
   class SaleProduct < Spree::Base
+
+    acts_as_list
+
     belongs_to :active_sale_event, :class_name => 'Spree::ActiveSaleEvent'
     belongs_to :product, class_name: 'Spree::Product'
 
