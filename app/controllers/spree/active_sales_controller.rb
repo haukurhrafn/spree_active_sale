@@ -2,7 +2,10 @@ module Spree
   class ActiveSalesController < Spree::StoreController
     before_action :load_sale, except: :index
     before_action :load_taxonomies, only: :show
+    before_action :redirect_to_product, if: :single_product_sale?, only: :show
+
     rescue_from ActiveRecord::RecordNotFound, with: :render_404
+
     helper 'spree/taxons'
     helper 'spree/products'
 
@@ -52,6 +55,14 @@ module Spree
 
       def load_taxonomies
         @taxonomies = Spree::Taxonomy.includes(root: :children)
+      end
+
+      def single_product_sale?
+        @sale_event.single_product_sale?
+      end
+
+      def redirect_to_product
+        redirect_to @products.first
       end
   end
 end
