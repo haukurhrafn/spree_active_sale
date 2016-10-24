@@ -3,10 +3,11 @@
 
 en:
   spree:
+    file_name: "File Name"
     active_sale:
       active_record:
         name: "Sale name"
-        permalink: "Sale permalink"
+        permalink: "Sale Permalink"
       event:
         active_record:
           description: "Event Description"
@@ -14,13 +15,13 @@ en:
           is_hidden: "Hidden?"
           is_permanent: "Permanent?"
           is_live: "Live?"
-          discount: "Discount percentage"
-          name: "Event name"
-          start_date: "Start date"
-          end_date: "End date"
+          discount: "Discount Percentage"
+          name: "Event Name"
+          start_date: "Start Date"
+          end_date: "End Date"
           permalink: "Type the name or permalink"
           position: "Position"
-          product_name: "Product name"
+          product_name: "Product Name"
           single_product_sale: "Single product sale?"
         boolean_yes: "Yes"
         boolean_no: "No"
@@ -37,24 +38,24 @@ en:
           second_text: 'Second'
           current_text: 'Current'
           close_text: 'Close'
-        details: "Sale event details"
+        details: "Sale Event Details"
         ending_message: "SALE CLOSES IN"
         discount_hint: "Decimal number with the mean or max discount percentage (i.e. '30' to express a 30%)."
         flash:
           error: "The page you are looking for is no longer available."
         images:
           link:
-            new: "New image"
-            edit: "Edit image"
-            back: "Back to images"
+            new: "New Image"
+            edit: "Edit Image"
+            back: "Back to Images"
           title:
-            new: "New event image"
-            edit: "Edit event image"
-            list: "Listing event images"
+            new: "New Event Image"
+            edit: "Edit Event Image"
+            list: "Listing Event Images"
         link:
-          new: "New event"
-          edit: "Edit event"
-          back: "Back to events"
+          new: "New Event"
+          edit: "Edit Event"
+          back: "Back to Events"
         no_image: "No image found. If image is not available for this sale and event is a single products sale then, affiliated product's image will be used by default to show on store."
         no_product: "No product found. If there is not available for this sale event then customers will not be able to see anything within this event/ deal on store."
         notice_messages:
@@ -64,17 +65,17 @@ en:
         product_name_hint: "Type the name of product and press 'Add' button to add in this sale event."
         products:
           title:
-            list: "Listing products"
+            list: "Listing Products"
         title:
-          new: "New event"
-          edit: "Edit event"
-          list: "Listing events"
+          new: "New Event"
+          edit: "Edit Event"
+          list: "Listing Events"
         sale_product:
           already_exists: "The product has already been added to event"
           attributes_missing: "You need to find and select a product first, product can't be blank."
           link:
             remove: "Remove"
-        sale_products: "Sale product(s)"
+        sale_products: "Sale Products"
         validation:
           errors:
             date_empty: "can't be left empty."
@@ -85,19 +86,19 @@ en:
         single_product_sale_message: "This event has single product sale enabled. You can not add more than one product to this event. You need to remove the existing product to add another product."
       create_if_no_record: "You don't have any sales, let's create one?"
       events_not_found: "There are no sales available at this moment. Try later?"
-      new_image: "New image"
-      new_sale_product: "New sale product"
+      new_image: "New Image"
+      new_sale_product: "New Sale Product"
       link:
-        new: "New active sale"
-        edit: "Edit active sale"
-        back: "Back to active sales list"
+        new: "New Active Sale"
+        edit: "Edit Active Sale"
+        back: "Back to Active Sales List"
       notice_messages:
         created: "Active sale was successfully created."
         updated: "Active sale was successfully updated."
         deleted: "Active sale has been deleted."
         event_deleted: "Active sale event/ schedule deleted."
       title:
-        new: "New active sale"
-        edit: "Edit active sale"
-        list: "Listing active sales"
+        new: "New Active Sale"
+        edit: "Edit Active Sale"
+        list: "Listing Active Sales"
       product_placeholder: "Add a Product"

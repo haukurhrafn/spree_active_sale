@@ -1,5 +1,5 @@
 <% content_for :page_title do %>
-  <%= link_to Spree.t(:active_sales), spree.active_sales_url %> /
+  <%= link_to Spree.t(:active_sales), admin_active_sales_path %> /
   <%= Spree.t(:new, scope: [:active_sale, :title]) %>
 <% end %>
 

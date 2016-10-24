@@ -1,24 +1,13 @@
-<% content_for :page_actions do %>
-  <%= button_link_to Spree.t(:edit, scope: [:active_sale, :link]), [:edit, :admin, @active_sale], icon: 'edit', id: 'edit_admin_active_sales_link' %>
-
-  <%= button_link_to Spree.t(:edit, scope: [:active_sale, :event, :link]), [:edit, :admin, @active_sale, @active_sale_event], icon: 'pencil', id: 'edit_admin_active_sale_link' %>
-
-  <%= button_link_to Spree.t(:back, scope: [:active_sale, :event, :images, :link]), [:admin, @active_sale, @active_sale_event, :sale_images], icon: 'arrow-left', id: 'admin_new_active_sale_link' %>
-<% end %>
-
 <div data-hook="admin_image_form_fields">
   <div class='row'>
-    <div class="col-md-6">
+    <div class="col-md-6 form-group">
       <%= f.label :attachment, Spree.t(:filename) %><br>
-      <%= f.file_field :attachment, class: 'form-control' %>
+      <%= f.file_field :attachment %>
     </div>
 
-    <div data-hook="alt_text" class="col-md-6">
+    <div data-hook="alt_text" class="col-md-6 form-group">
       <%= f.label Spree.t(:alt_text) %><br>
       <%= f.text_area :alt, rows: 4, class: 'form-control' %>
     </div>
   </div>
 </div>
-
-<div class="clear"></div>
-<br/>

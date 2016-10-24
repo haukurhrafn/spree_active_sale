@@ -14,7 +14,7 @@ module Spree
         @active_sale_event = Spree::ActiveSaleEvent.find(params[:id])
         @active_sale_event.delete
 
-        flash.notice = I18n.t('spree.active_sale.notice_messages.event_deleted')
+        flash[:success] = I18n.t('spree.active_sale.notice_messages.event_deleted')
 
         respond_with(@active_sale_event) do |format|
           format.html { redirect_to collection_url }

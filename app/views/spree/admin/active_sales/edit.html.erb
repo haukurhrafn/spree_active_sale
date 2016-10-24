@@ -1,10 +1,9 @@
 <% content_for :page_title do %>
-  <%= Spree.t(:edit, scope: [:active_sale, :title]) %>/<%= @active_sale.name %>
+  <%= link_to Spree.t(:active_sales), admin_active_sales_path %> / <%= @active_sale.name %>
 <% end %>
 
 <% content_for :page_actions do %>
-  <%= button_link_to Spree.t(:back, scope: [:active_sale, :link]), collection_url, icon: 'arrow-left', id: 'admin_new_active_sale_link' %>
-  <%= button_link_to Spree.t(:new, scope: [:active_sale, :event, :link]), [:new, :admin, @active_sale, :active_sale_event], icon: 'plus', id: 'admin_new_active_sale_link' %>
+  <%= button_link_to Spree.t(:new, scope: [:active_sale, :event, :link]), [:new, :admin, @active_sale, :active_sale_event], icon: 'plus', id: 'admin_new_active_sale_link', class: 'btn-success' %>
 <% end %>
 
 <div data-hook="admin_active_sale_edit_form">

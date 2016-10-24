@@ -17,8 +17,7 @@ module Spree
         @active_sale = Spree::ActiveSale.find_by_permalink!(params[:id])
         @active_sale.delete
 
-        flash.notice = I18n.t('spree.active_sale.notice_messages.deleted')
-
+        flash[:success] = I18n.t('spree.active_sale.notice_messages.deleted')
         respond_with(@active_sale) do |format|
           format.html { redirect_to collection_url }
           format.js  { render_js_for_destroy }
