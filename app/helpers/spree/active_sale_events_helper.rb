@@ -34,7 +34,7 @@ module Spree
       self.class.send :define_method, "#{style}_event_image" do |sale_event, *options|
         options = options.first || {}
         if sale_event.sale_images.empty?
-          sale_event.single_product_sale? ? get_product_image(sale_event) : (image_tag "noimage/#{style}.png", options)
+          sale_event.single_product_sale? ? get_product_image(sale_event, style, options) : (image_tag "noimage/#{style}.png", options)
         else
           image = sale_event.sale_images.first
           options.reverse_merge! alt: image.alt.blank? ? sale_event.name : image.alt
@@ -43,7 +43,7 @@ module Spree
       end
     end
 
-    def get_product_image(sale_event)
+    def get_product_image(sale_event, style, options)
       if sale_event.products.empty?
         image_tag "noimage/#{style}.png", options
       else
