@@ -43,7 +43,7 @@
             <div class="col-sm-12">
               <%= f.field_container :shipping_categories, class: ['form-group'] do %>
                 <%= f.label :shipping_category_id, Spree.t(:shipping_categories) %>
-                <%= f.collection_select(:shipping_category_id, @shipping_categories, :id, :name, { include_blank: 'None' }, { class: 'select2 form-control' }) %>
+                <%= f.collection_select(:shipping_category_id, @shipping_categories, :id, :name, { include_blank: 'None' }, { class: 'select2' }) %>
                 <%= f.error_message_on :shipping_category %>
               <% end %>
             </div>

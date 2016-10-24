@@ -8,7 +8,7 @@
       <%= f.field_container :active_sale_event_id, class: ['form-group'] do %>
         <%= f.label :product_name, Spree.t(:product_name, scope: [:active_sale, :event, :active_record], default: :product_name) %>
         <p class='hint'><%= Spree.t(:product_name_hint, scope: [:active_sale, :event]) %></p>
-        <%= f.text_field :product_id, class: 'autocomplete form-control', data: { auto_complete_url: search_admin_active_sales_url } %>
+        <%= f.text_field :product_id, class: 'autocomplete', data: { auto_complete_url: search_admin_active_sales_url } %>
         <%= f.error_message_on :active_sale_event_id %>
       <% end %>
     </div>
