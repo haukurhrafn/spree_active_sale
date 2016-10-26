@@ -49,7 +49,7 @@ module Spree
         if @sale_event.present?
           @sale_properties, @products = @sale_event.sale_properties.includes(:property), @sale_event.products
         else
-          @sale_properties, @products = [], []
+          redirect_to root_url
         end
       end
 
@@ -58,7 +58,7 @@ module Spree
       end
 
       def single_product_sale?
-        @sale_event.single_product_sale?
+        @sale_event.single_product_sale? if @sale_event
       end
 
       def redirect_to_product

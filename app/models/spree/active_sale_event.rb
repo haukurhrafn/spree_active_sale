@@ -95,7 +95,9 @@ module Spree
 
       # check if there is no another event is currently live and active
       def validate_with_live_event
-        if !active_sale.active_sale_events.where('id != :id', {:id => self.id}).select{ |ase| ase.live? }.blank? && self.live?
+        if id.nil? && !active_sale.active_sale_events.select{ |ase| ase.live? }.blank? && self.live?
+          errors.add(:another_event, Spree.t('active_sale.event.validation.errors.live_event'))
+        elsif !active_sale.active_sale_events.where('id != :id', {:id => self.id}).select{ |ase| ase.live? }.blank? && self.live?
           errors.add(:another_event, Spree.t('active_sale.event.validation.errors.live_event'))
         end
       end
