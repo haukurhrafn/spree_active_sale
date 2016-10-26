@@ -3,14 +3,14 @@ module Spree
 
     acts_as_list
 
-    belongs_to :active_sale_event, :class_name => 'Spree::ActiveSaleEvent'
+    belongs_to :active_sale_event, class_name: 'Spree::ActiveSaleEvent'
     belongs_to :product, class_name: 'Spree::Product'
 
-    delegate :product_name, :to => :product
-    delegate :sale_name, :to => :active_sale_event
+    delegate :product_name, to: :product
+    delegate :sale_name, to: :active_sale_event
 
-    validates :active_sale_event_id, :product_id, :presence => true
-    validates :active_sale_event_id, :uniqueness => { :scope => :product_id, :message => I18n.t('spree.active_sale.event.sale_product.already_exists') }
+    validates :active_sale_event_id, :product_id, presence: true
+    validates :active_sale_event_id, uniqueness: { scope: :product_id, message: Spree.t('spree.active_sale.event.sale_product.already_exists') }
 
     delegate :discount, to: :active_sale_event
 

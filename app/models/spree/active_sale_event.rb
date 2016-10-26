@@ -82,17 +82,21 @@ module Spree
       self.start_and_dates_available? && (self.start_date >= self.end_date)
     end
 
+    def time_left
+      self.end_date - object_zone_time
+    end
+
     private
 
       # check if there is start and end dates are correct
       def validate_start_and_end_date
-        errors.add(:start_date, I18n.t('spree.active_sale.event.validation.errors.invalid_dates')) if invalid_dates?
+        errors.add(:start_date, Spree.t('active_sale.event.validation.errors.invalid_dates')) if invalid_dates?
       end
 
       # check if there is no another event is currently live and active
       def validate_with_live_event
         if !active_sale.active_sale_events.where('id != :id', {:id => self.id}).select{ |ase| ase.live? }.blank? && self.live?
-          errors.add(:another_event, I18n.t('spree.active_sale.event.validation.errors.live_event'))
+          errors.add(:another_event, Spree.t('active_sale.event.validation.errors.live_event'))
         end
       end
 
