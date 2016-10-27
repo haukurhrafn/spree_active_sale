@@ -3,11 +3,13 @@
     <div class="col-md-6 form-group">
       <%= f.label :attachment, Spree.t(:filename) %><br>
       <%= f.file_field :attachment %>
+      <%= f.error_message_on :attachment %>
     </div>
 
     <div data-hook="alt_text" class="col-md-6 form-group">
       <%= f.label Spree.t(:alt_text) %><br>
       <%= f.text_area :alt, rows: 4, class: 'form-control' %>
+      <%= f.error_message_on :alt_text %>
     </div>
   </div>
 </div>

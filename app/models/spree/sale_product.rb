@@ -5,22 +5,24 @@ module Spree
 
     belongs_to :active_sale_event, class_name: 'Spree::ActiveSaleEvent'
     belongs_to :product, class_name: 'Spree::Product'
+#TODO: fix delegate
+    delegate :name, to: :product, allow_nil: true, prefix: true
+    delegate :sale_name, to: :active_sale_event, allow_nil: true
 
-    delegate :product_name, to: :product
-    delegate :sale_name, to: :active_sale_event
+#TODO: remove id validations, allow nil for uniqueness
+    validates :active_sale_event, :product, presence: true
+    validates :active_sale_event_id, uniqueness: { scope: :product_id, allow_blank: true, message: Spree.t(:already_exists, scope: [:active_sale, :event, :sale_product]) }
+#TODO: allow nil
+    delegate :discount, to: :active_sale_event, allow_nil: true
 
-    validates :active_sale_event_id, :product_id, presence: true
-    validates :active_sale_event_id, uniqueness: { scope: :product_id, message: Spree.t('spree.active_sale.event.sale_product.already_exists') }
-
-    delegate :discount, to: :active_sale_event
-
-    def product_name
-      product.try(:name)
-    end
-
-    def product_name=(name)
-      self.product.name ||= name if name.present?
-    end
+#TODO: delegate product_name, product_name=
+    # def product_name
+    #   product.try(:name)
+    # end
+    #
+    # def product_name=(name)
+    #   self.product.name ||= name if name.present?
+    # end
 
     def product
       Spree::Product.unscoped { super }

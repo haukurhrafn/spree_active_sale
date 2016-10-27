@@ -47,7 +47,7 @@ module Spree
         @active_sale = ActiveSale.find_by_permalink!(params[:id])
         @sale_event = @active_sale.active_sale_events.live_active_and_hidden(hidden: false).first
         if @sale_event.present?
-          @sale_properties, @products = @sale_event.sale_properties.includes(:property), @sale_event.products
+          @sale_properties, @products = @sale_event.sale_properties.includes(:property), @sale_event.products.active
         else
           redirect_to root_url
         end

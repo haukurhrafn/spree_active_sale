@@ -2,9 +2,9 @@ module Spree
   module ActiveSaleEventsHelper
 
     def sale_event_timer(event = nil, layout = nil)
-      return I18n.t('spree.active_sale.event.can_not_be_nil') if event.nil? || !(event.kind_of? Spree::ActiveSaleEvent)
+      return Spree.t(:can_not_be_nil, scope: [:active_sale, :event]) if event.nil? || !(event.kind_of? Spree::ActiveSaleEvent)
       layout ||= '{dn} DAYS {hnn}{sep}{mnn}{sep}{snn}'
-      content_tag(:span, I18n.t('spree.active_sale.event.ending_message'), class: 'sale_event_message') + " " + content_tag(:span, event.end_date.strftime('%Y-%m-%dT%H:%M:%S'), data: { timer: event.time_left.to_i, layout: layout }, class: 'sale_event_message_timer')
+      content_tag(:span, Spree.t(:ending_message, scope: [:active_sale, :event]), class: 'sale_event_message') + " " + content_tag(:span, event.end_date.strftime('%Y-%m-%dT%H:%M:%S'), data: { timer: event.time_left.to_i, layout: layout }, class: 'sale_event_message_timer')
     end
 
     def method_missing(method_name, *args, &block)

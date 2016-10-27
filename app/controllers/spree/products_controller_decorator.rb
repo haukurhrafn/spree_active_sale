@@ -5,10 +5,7 @@ module Spree
     before_action :load_taxonomies, only: :show
 
     def show
-      @product = Spree::Product.active.find_by(slug: params[:id])
-      return unless @product
-
-      if @product.live?
+      if @product && @product.live?
         @variants = Spree::Variant.active.includes([:option_values, :images]).where(product_id: @product.id)
         @product_properties = Spree::ProductProperty.includes(:property).where(product_id: @product.id)
 
@@ -20,7 +17,7 @@ module Spree
 
         respond_with(@product)
       else
-        redirect_to root_url, :error => t('spree.active_sale.event.flash.error')
+        redirect_to root_url, :error => Spree.t(:error, scope: [:active_sale, :event, :flash])
       end
     end
 

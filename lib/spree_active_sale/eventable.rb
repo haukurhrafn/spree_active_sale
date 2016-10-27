@@ -4,7 +4,7 @@ module SpreeActiveSale
   module Eventable
     module ClassMethods
 
-      # Spree::ActiveSaleEvent.is_live? method 
+      # Spree::ActiveSaleEvent.is_live? method
       # should only/ always represents live and active events and not just live events.
       def is_live? object
         object_class_name = object.class.name
@@ -34,11 +34,11 @@ module SpreeActiveSale
           Time.zone.now
         end
     end
-    
+
     module InstanceMethods
 
       def validate_start_and_end_date
-        errors.add(:start_date, I18n.t('spree.active_sale.event.validation.errors.invalid_dates')) if invalid_dates?
+        errors.add(:start_date, Spree.t(:invalid_dates, [:active_sale, :event, :validation, :errors])) if invalid_dates?
       end
 
       def live?(moment=nil)
@@ -90,7 +90,7 @@ module SpreeActiveSale
           Time.zone.now
         end
     end
-    
+
     def self.included(receiver)
       receiver.extend         ClassMethods
       receiver.send :include, InstanceMethods
