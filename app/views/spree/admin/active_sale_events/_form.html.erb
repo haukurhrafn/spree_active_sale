@@ -32,7 +32,7 @@
                 <% if @active_sale_event.start_date? %>
                   <% start_date = l(@active_sale_event.start_date, format: Spree.t(:format, scope: [:active_sale, :event, :datetimepicker])) %>
                 <% else %>
-                  <% start_date = l(Time.zone.now, format: Spree.t(:format, scope: [:active_sale, :event, :datetimepicker])) %>
+                  <% start_date = l(Time.current, format: Spree.t(:format, scope: [:active_sale, :event, :datetimepicker])) %>
                 <% end %>
                 <%= f.text_field :start_date, value: start_date, class: 'timepicker form-control' %>
               <% end %>
@@ -99,7 +99,7 @@
               <%= f.field_container :end_date, class: ['form-group'] do %>
                 <%= f.label :end_date, raw(Spree.t(:end_date, scope: [:active_sale, :event, :active_record]) + content_tag(:span, ' *', class: 'required')) %>
                 <%= f.error_message_on :end_date %>
-                <% end_date = l((@active_sale_event.end_date? ? @active_sale_event.end_date : Time.zone.now+1.day), format: Spree.t(:format, scope: [:active_sale, :event, :datetimepicker])) %>
+                <% end_date = l((@active_sale_event.end_date? ? @active_sale_event.end_date : Time.current + 1.day), format: Spree.t(:format, scope: [:active_sale, :event, :datetimepicker])) %>
                 <%= f.text_field :end_date, value: end_date, class: 'timepicker form-control' %>
               <% end %>
             </div>

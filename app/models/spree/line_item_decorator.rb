@@ -16,8 +16,4 @@ Spree::LineItem.class_eval do
         variant.price_modifier_amount(opts)
     end
   end
-#TODO: delegate
-  # def live?
-  #   self.product.live?
-  # end
 end

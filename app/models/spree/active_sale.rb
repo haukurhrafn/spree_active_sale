@@ -12,7 +12,7 @@ module Spree
     has_many :active_sale_events, -> { where(deleted_at: nil) }, dependent: :destroy
 
     validates :name, :permalink, presence: true
-    validates :permalink, uniqueness: { allow_blank: true, case_sensitive: true } #TODO: Case Sensitive
+    validates :permalink, uniqueness: { allow_blank: true, case_sensitive: true }
 
     default_scope { order(position: :asc) }
 
@@ -20,7 +20,6 @@ module Spree
     alias :schedules :events
 
     self.whitelisted_ransackable_attributes = ['deleted_at']
-    #TODO: Sortel form all_blank?
     accepts_nested_attributes_for :active_sale_events, allow_destroy: true, reject_if: :all_blank
 
     def self.config(&block)
@@ -38,7 +37,6 @@ module Spree
       permalink.present? ? permalink : (permalink_was || name.to_s.to_url)
     end
 
-#TODO: alias
     # def events
     #   self.active_sale_events
     # end

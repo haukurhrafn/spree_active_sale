@@ -75,7 +75,7 @@ module Spree
       end
 
       def prepare(params)
-        @properties[:start_date] = @properties[:end_date] = params[:current_time].blank? ? Time.zone.now : DateTime.parse(params[:current_time])
+        @properties[:start_date] = @properties[:end_date] = params[:current_time].blank? ? Time.current : DateTime.parse(params[:current_time])
         @properties[:active] = params[:active].blank? ? true : (params[:active] == "true")
         @properties[:hidden] = params[:hidden].blank? ? false : (params[:hidden] == "true")
 

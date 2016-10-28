@@ -1,5 +1,4 @@
 Spree::Taxon.class_eval do
-  #TODO: dependent
   has_many :sale_taxons, dependent: :restrict_with_error
   has_many :active_sale_events, through: :sale_taxons
 
@@ -9,7 +8,6 @@ Spree::Taxon.class_eval do
   end
 
   # if there is at least one sale event which is live and active.
-  #TODO: remove self
   def live?
     !live_active_sale_events.blank?
   end

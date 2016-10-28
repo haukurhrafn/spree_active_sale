@@ -13,7 +13,6 @@ module Spree
     has_many :sale_properties, dependent: :destroy
     has_many :properties, through: :sale_properties
     belongs_to :active_sale
-#TODO: validate active_save intead of id
     validates :name, :start_date, :end_date, :active_sale, presence: true
     validate  :validate_start_and_end_date, if: :invalid_dates?
     validate  :validate_with_live_event
@@ -43,7 +42,6 @@ module Spree
         end
     end
 
-#TODO: Remove self
     # override the delete method to set deleted_at value
     # instead of actually deleting the event.
     def delete
@@ -89,13 +87,11 @@ module Spree
 
     private
 
-#TODO: refactor validate_start_and_end_date move condition to validation
       # check if there is start and end dates are correct
       def validate_start_and_end_date
         errors.add(:start_date, Spree.t('active_sale.event.validation.errors.invalid_dates'))
       end
 
-      #TODO: refactor validate_with_live_event, remove self, rearrange condition, sql
       # check if there is no another event is currently live and active
       def validate_with_live_event
         if id.nil? && live? && !active_sale.active_sale_events.select{ |ase| ase.live? }.blank?
@@ -106,7 +102,7 @@ module Spree
       end
 
       def object_zone_time
-        Time.current #TODO: Time.current
+        Time.current
       end
   end
 end

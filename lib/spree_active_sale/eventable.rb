@@ -31,7 +31,7 @@ module SpreeActiveSale
         end
 
         def zone_time
-          Time.zone.now
+          Time.current
         end
     end
 
@@ -87,7 +87,7 @@ module SpreeActiveSale
 
       private
         def object_zone_time
-          Time.zone.now
+          Time.current
         end
     end
 

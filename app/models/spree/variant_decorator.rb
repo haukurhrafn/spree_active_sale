@@ -18,7 +18,6 @@ Spree::Variant.class_eval do
     get_sale_event(self)
   end
 
-#TODO: remove self, refector if can
   def live?
     !live_active_sale_event.nil? || product.live?
   end

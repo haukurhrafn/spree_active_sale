@@ -234,7 +234,7 @@ module Spree
         end
 
         def zone_time
-          Time.zone.now
+          Time.current
         end
 
         def zone_day_duration
