@@ -37,8 +37,5 @@ module Spree
       permalink.present? ? permalink : (permalink_was || name.to_s.to_url)
     end
 
-    # def events
-    #   self.active_sale_events
-    # end
   end
 end

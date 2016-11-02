@@ -2,21 +2,8 @@
 require 'spec_helper'
 
 describe Spree::CheckoutController, type: :controller do
-  let(:token) { 'some_token' }
-  let(:user) { stub_model(Spree::LegacyUser) }
-  let(:order) { order = FactoryGirl.create(:order_with_totals) }
 
-  before do
-    controller.stub :try_spree_current_user => user
-    controller.stub :current_order => order
-  end
+  stub_authorization!
+  it { is_expected.to use_before_action(:check_active_products_in_order) }
 
-  let(:active_sale_event_with_products) { FactoryGirl.create(:active_sale_event_with_products) }
-
-  context "#edit" do
-    it 'should check if the event is live for :edit' do
-      controller.should_receive(:authorize!).with(:edit, order, token)
-      spree_get :edit, { :state => 'address' }, { :access_token => token }
-    end
-  end
 end

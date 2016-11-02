@@ -82,7 +82,7 @@ describe Spree::TaxonsController, type: :controller do
 
       it 'expects to redirect to root' do
         send_request
-        expect(response).to  redirect_to root_url
+        expect(response).to  redirect_to root_path
       end
 
     end

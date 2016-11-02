@@ -32,7 +32,7 @@ FactoryGirl.define do
       end
 
       after(:create) do |sale, evaluator|
-        FactoryGirl.create_list(:active_sale_event, evaluator.events_count, :active_sale => sale, :is_active => evaluator.active, :is_hidden => hidden, :is_permanent => permanent, :single_product_sale => single_product_sale)
+        FactoryGirl.create_list(:active_sale_event, evaluator.events_count, :active_sale => sale, :is_active => false, :is_hidden => evaluator.hidden, :is_permanent => false, :single_product_sale => evaluator.single_product_sale)
       end
 
       factory :inactive_sale_with_events, :traits => [:inactive]

@@ -9,13 +9,15 @@ describe Spree::ProductsController, type: :controller do
   let(:products) { [product] }
   let(:taxon) { mock_model(Spree::Taxon) }
   let(:user) { mock_model(Spree.user_class, :has_spree_role? => true, :last_incomplete_spree_order => nil, :spree_api_key => 'fake') }
-  let(:variants) { [variants] }
+  let(:variant) { mock_model Spree::Variant }
+  let(:variants) { [variant] }
 
   describe '#show' do
 
     before do
       allow(Spree::Product).to receive(:with_deleted).and_return(products)
       allow(controller).to receive(:spree_current_user).and_return(user)
+      allow(Spree::Variant).to receive_message_chain(:active, :includes, :where).and_return(variants)
       allow(products).to receive_message_chain(:includes, :friendly, :find).and_return(product)
       allow(product).to receive_message_chain(:taxons, :first).and_return(taxon)
     end
@@ -37,6 +39,9 @@ describe Spree::ProductsController, type: :controller do
 
       it 'expects to assign' do
         send_request
+        expect(assigns(:product)).to eq(product)
+        expect(assigns(:variants)).to eq(variants)
+        expect(assigns(:taxon)).to eq(taxon)
       end
 
       it 'expects to render template show' do
@@ -62,9 +67,7 @@ describe Spree::ProductsController, type: :controller do
 
       it 'expects to assign' do
         send_request
-        expect(:product).to eq(product)
-        expect(:variants).to eq(variants)
-        expect(:taxon).to eq(taxon)
+        expect(assigns(:product)).to eq(product)
       end
 
       it 'expects to redirect to root' do

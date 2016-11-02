@@ -36,7 +36,7 @@ module Spree
         if @sale_event.present?
           @sale_properties, @products = @sale_event.sale_properties.includes(:property), @sale_event.products.active
         else
-          redirect_to root_url
+          redirect_to root_path
         end
       end
 
