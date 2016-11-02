@@ -7,6 +7,7 @@ Spree::Product.class_eval do
 
   # Find live and active taxons for a product.
   def find_live_taxons
+    byebug
     Spree::Taxon.joins([:active_sale_events, :products]).where(spree_products: { id: id }).merge(Spree::ActiveSaleEvent.available)
   end
 
