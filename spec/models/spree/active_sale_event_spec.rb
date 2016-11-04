@@ -158,4 +158,34 @@ describe Spree::ActiveSaleEvent, type: :model do
     it { expect(subject.time_left.ceil.to_i).to eq(5.days.to_i) }
   end
 
+  describe 'validate_start_and_end_date' do
+    active_sale_event = Spree::ActiveSaleEvent.new
+    active_sale_event.valid?
+    it { expect(active_sale_event.valid?).to be false }
+    it { expect(active_sale_event.errors).not_to be nil }
+    active_sale_event.send(:validate_start_and_end_date)
+  end
+
+  describe 'validate_with_live_event' do
+    let!(:spree_taxon) { Spree::Taxon.create name: 'taxon1' }
+    let!(:active_sale) { Spree::ActiveSale.create name: 'sale1' }
+    let!(:active_sale_event) { Spree::ActiveSaleEvent.create name: "sale day 1", start_date: 1.day.ago, end_date: 1.day.from_now, is_active: true, active_sale: active_sale, discount: 10 }
+    let!(:spree_sale_taxons) { Spree::SaleTaxon.create taxon: spree_taxon, active_sale_event: active_sale_event }
+    let!(:product) { create :product }
+    let!(:spree_products_taxons) {  Spree::Classification.create product: product, taxon: spree_taxon }
+
+    context 'when not a new record' do
+      let!(:active_sale_event_1) { Spree::ActiveSaleEvent.new name: "sale day 2", start_date: 1.day.ago, end_date: 1.day.from_now, is_active: true, active_sale: active_sale, discount: 10 }
+      it { expect(active_sale_event_1.valid?).to be false }
+      it { expect(active_sale_event_1.errors).not_to be nil }
+    end
+
+    context 'when new record' do
+      let!(:active_sale_event_2) { Spree::ActiveSaleEvent.new name: "sale day 1", start_date: 1.day.ago, end_date: 1.day.from_now, is_active: true, active_sale: active_sale, discount: 10 }
+      it { expect(active_sale_event_2.valid?).to be false }
+      it { expect(active_sale_event_2.errors).not_to be nil }
+    end
+
+  end
+
 end

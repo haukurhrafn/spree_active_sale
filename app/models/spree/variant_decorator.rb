@@ -11,11 +11,9 @@ Spree::Variant.class_eval do
 
   delegate_belongs_to :default_price, :discounted_price_including_vat_for
 
-  has_many :active_sale_events, as: :eventable
-
   # variant.live_active_sale_event gets first active sale event which is live and active
   def live_active_sale_event
-    get_sale_event(self)
+    get_sale_event
   end
 
   def live?

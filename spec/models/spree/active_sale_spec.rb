@@ -30,4 +30,8 @@ describe Spree::ActiveSale do
 
   end
 
+  describe 'self.config' do
+    it { expect { |block| Spree::ActiveSale.config(&block) }.to yield_with_args(Spree::ActiveSaleConfig) }
+  end
+
 end

@@ -4,7 +4,6 @@ module Spree
     belongs_to :property
 
     validates :active_sale_event, :property, presence: true
-    validates :value, length: { maximum: 255 }
     default_scope { order(:position) }
 
     delegate :name, to: :property, allow_nil: true

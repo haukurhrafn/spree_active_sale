@@ -16,7 +16,6 @@ require File.expand_path('../dummy/config/environment.rb',  __FILE__)
 
 require 'rspec/rails'
 require 'database_cleaner'
-
 require 'capybara/rspec'
 require 'capybara/rails'
 require 'shoulda/matchers'
@@ -39,6 +38,7 @@ require 'spree/testing_support/order_walkthrough'
 require 'spree/testing_support/caching'
 require 'spree/testing_support/shoulda_matcher_configuration'
 require 'spree/testing_support/microdata'
+require 'paperclip/matchers'
 
 # require 'byebug'
 require 'spree_active_sale/factories'
@@ -77,7 +77,7 @@ RSpec.configure do |config|
   config.include Spree::TestingSupport::UrlHelpers
   config.include Spree::TestingSupport::ControllerRequests, type: :controller
   config.include Spree::TestingSupport::Flash
-
+  config.include Paperclip::Shoulda::Matchers
 
   # == Mock Framework
   #
