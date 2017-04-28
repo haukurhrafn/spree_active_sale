@@ -33,23 +33,23 @@ module Spree
     add_simple_scopes simple_scopes
 
     add_search_scope :start_date_between do |from, to|
-      where(ActiveSaleEvent.table_name => { start_date: from..to })
+      where(ActiveSaleEvent.table_name => { :start_date => from..to })
     end
 
     add_search_scope :end_date_between do |from, to|
-      where(ActiveSaleEvent.table_name => { end_date: from..to })
+      where(ActiveSaleEvent.table_name => { :end_date => from..to })
     end
 
     add_search_scope :active_products do
-      Spree::Product.active.includes(variants_including_master: [:prices, :images]).
-      joins([active_sale_events: :sale_products]).
+      Spree::Product.active.includes(:variants_including_master => [:prices, :images]).
+      joins([:active_sale_events => :sale_products]).
       merge(Spree::ActiveSaleEvent.available).
       order("spree_sale_products.position ASC")
     end
 
     add_search_scope :active_products_in_sale_taxon do |taxon|
-      Spree::Product.active.includes(variants_including_master: [:prices, :images]).
-      joins([active_sale_events: :sale_products]).
+      Spree::Product.active.includes(:variants_including_master => [:prices, :images]).
+      joins([:active_sale_events => :sale_products]).
       merge(Spree::ActiveSaleEvent.available.in_sale_taxon(taxon)).
       order("spree_sale_products.position ASC")
     end
@@ -84,12 +84,12 @@ module Spree
       end
 
       scope.joins(:taxons).
-      where(Taxon.table_name => { id: taxon.self_and_descendants.map(&:id) })
+      where(Taxon.table_name => { :id => taxon.self_and_descendants.map(&:id) })
     end
 
     add_search_scope :in_sale_taxon do |taxon|
       joins(:taxons).
-      where(Taxon.table_name => { id: taxon.self_and_descendants.map(&:id) })
+      where(Taxon.table_name => { :id => taxon.self_and_descendants.map(&:id) })
     end
 
     # This scope selects sales in all taxons AND all its descendants
@@ -145,7 +145,7 @@ module Spree
     # Finds all sales that have the ids matching the given collection of ids.
     # Alternatively, you could use find(collection_of_ids), but that would raise an exception if one sale event couldn't be found
     add_search_scope :with_ids do |*ids|
-      where(id: ids)
+      where(:id => ids)
     end
 
     add_search_scope :not_deleted do
@@ -164,11 +164,11 @@ module Spree
     end
 
     add_search_scope :active do |*args|
-      where(is_active: valid_argument(args))
+      where(:is_active => valid_argument(args))
     end
 
     add_search_scope :hidden do |*args|
-      where(is_hidden: valid_argument(args))
+      where(:is_hidden => valid_argument(args))
     end
 
     add_search_scope :live_active do |*args|
@@ -182,19 +182,19 @@ module Spree
     end
 
     add_search_scope :upcoming_events do |*args|
-      where("start_date > :start_date", { start_date: zone_time })
+      where("start_date > :start_date", { :start_date => zone_time })
     end
 
     add_search_scope :past_events do |*args|
-      where("end_date < :end_date", { end_date: zone_time })
+      where("end_date < :end_date", { :end_date => zone_time })
     end
 
     add_search_scope :starting_today do |*args|
-      where(start_date: zone_day_duration)
+      where(:start_date => zone_day_duration)
     end
 
     add_search_scope :ending_today do |*args|
-       where(end_date: zone_day_duration)
+       where(:end_date => zone_day_duration)
     end
 
     add_search_scope :available do |*args|
@@ -234,7 +234,7 @@ module Spree
         end
 
         def zone_time
-          Time.current
+          Time.zone.now
         end
 
         def zone_day_duration
@@ -244,7 +244,7 @@ module Spree
         # specifically avoid having an order for taxon search (conflicts with main order)
         def prepare_taxon_conditions(taxons)
           ids = taxons.map { |taxon| taxon.self_and_descendants.pluck(:id) }.flatten.uniq
-          joins(:taxons).where("#{Taxon.table_name}.id": ids)
+          joins(:taxons).where("#{Taxon.table_name}.id" => ids)
         end
 
         # Produce an array of keywords for use in scopes.
