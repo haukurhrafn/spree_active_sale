@@ -7,14 +7,14 @@ module Spree
 
       def show
         session[:return_to] ||= request.referer
-        redirect_to( :action => :edit )
+        redirect_to(action: :edit)
       end
 
       def destroy
         @active_sale_event = Spree::ActiveSaleEvent.find(params[:id])
         @active_sale_event.delete
 
-        flash.notice = I18n.t('spree.active_sale.notice_messages.event_deleted')
+        flash[:success] = Spree.t(:event_deleted, scope: [:active_sale, :notice_messages])
 
         respond_with(@active_sale_event) do |format|
           format.html { redirect_to collection_url }
@@ -30,7 +30,6 @@ module Spree
       end
 
       private
-      
         def location_after_save
           edit_admin_active_sale_active_sale_event_url(@active_sale, @active_sale_event)
         end
@@ -41,12 +40,12 @@ module Spree
           return @collection if @collection.present?
           params[:q] ||= {}
           params[:q][:deleted_at_null] ||= "1"
-          
+
           params[:q][:s] ||= "name asc"
 
           @search = super.ransack(params[:q])
 
-          @search = Spree::ActiveSaleEvent.where(:active_sale_id => params[:active_sale_id]).ransack(params[:q])
+          @search = Spree::ActiveSaleEvent.where(active_sale_id: params[:active_sale_id]).ransack(params[:q])
           @collection = @search.result.page(params[:page]).per(Spree::ActiveSaleConfig[:admin_active_sale_events_per_page])
         end
 

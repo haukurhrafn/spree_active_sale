@@ -2,15 +2,15 @@ module Spree
   class SaleImage < Asset
 
     has_attached_file :attachment,
-                      :styles => { :mini => '48x48>', :small => '100x100>', :sale => '240x240>', :large => '600x600>' },
-                      :default_style => :sale,
-                      :url => '/spree/sales/:id/:style/:basename.:extension',
-                      :path => ':rails_root/public/spree/sales/:id/:style/:basename.:extension',
-                      :convert_options => { :all => '-strip' }
+                      styles: { mini: '48x48>', small: '100x100>', sale: '240x240>', large: '600x600>' },
+                      default_style: :sale,
+                      url: '/spree/sales/:id/:style/:basename.:extension',
+                      path: ':rails_root/public/spree/sales/:id/:style/:basename.:extension',
+                      convert_options: { all: '-strip' }
     # save the w,h of the original image (from which others can be calculated)
     # we need to look at the write-queue for images which have not been saved yet
     validates_attachment :attachment, presence: true,
-      content_type: { content_type: /\Aimage\/.*\Z/ }
+                         content_type: { content_type: /\Aimage\/.*\Z/ }
 
     validate :no_attachment_errors
     after_post_process :find_dimensions

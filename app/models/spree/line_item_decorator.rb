@@ -1,4 +1,7 @@
 Spree::LineItem.class_eval do
+
+  delegate :live?, to: :product, allow_nil: true
+
   def update_price
     self.price = variant.discounted_price_including_vat_for(tax_zone: tax_zone)
   end
@@ -12,9 +15,5 @@ Spree::LineItem.class_eval do
       self.price = variant.discount_price_if_sale_live +
         variant.price_modifier_amount(opts)
     end
-  end
-
-  def live?
-    self.product.live?
   end
 end

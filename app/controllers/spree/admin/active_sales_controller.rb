@@ -10,15 +10,14 @@ module Spree
 
       def show
         session[:return_to] ||= request.referer
-        redirect_to( :action => :edit )
+        redirect_to(action: :edit)
       end
 
       def destroy
         @active_sale = Spree::ActiveSale.find_by_permalink!(params[:id])
         @active_sale.delete
 
-        flash.notice = I18n.t('spree.active_sale.notice_messages.deleted')
-
+        flash[:success] = Spree.t(:deleted, scope: [:active_sale, :notice_messages])
         respond_with(@active_sale) do |format|
           format.html { redirect_to collection_url }
           format.js  { render_js_for_destroy }
@@ -26,7 +25,7 @@ module Spree
       end
 
       def search
-        params[:q].blank? ? [] : @products = Spree::Product.limit(20).search(:name_cont => params[:q]).result
+        params[:q].blank? ? [] : @products = Spree::Product.limit(20).search(name_cont: params[:q]).result
       end
 
       private

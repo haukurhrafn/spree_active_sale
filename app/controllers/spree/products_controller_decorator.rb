@@ -1,26 +1,16 @@
 module Spree
   ProductsController.class_eval do
-    HTTP_REFERER_REGEXP = /^https?:\/\/[^\/]+\/t\/([a-z0-9\-\/]+)$/ unless defined? HTTP_REFERER_REGEXP
 
     before_action :load_taxonomies, only: :show
 
     def show
-      @product = Spree::Product.active.find_by(slug: params[:id])
-      return unless @product
-
-      if @product.live?
-        @variants = Spree::Variant.active.includes([:option_values, :images]).where(:product_id => @product.id)
-        @product_properties = Spree::ProductProperty.includes(:property).where(:product_id => @product.id)
-
-        referer = request.env['HTTP_REFERER']
-
-        if referer && referer.match(HTTP_REFERER_REGEXP)
-          @taxon = Spree::Taxon.find_by_permalink($1)
-        end
-
+      if @product && @product.live?
+        @variants = Spree::Variant.active.includes([:option_values, :images]).where(product_id: @product.id)
+        @product_properties = Spree::ProductProperty.includes(:property).where(product_id: @product.id)
+        @taxon = params[:taxon_id].present? ? Spree::Taxon.find(params[:taxon_id]) : @product.taxons.first
         respond_with(@product)
       else
-        redirect_to root_url, :error => t('spree.active_sale.event.flash.error')
+        redirect_to root_url, :error => Spree.t(:error, scope: [:active_sale, :event, :flash])
       end
     end
 

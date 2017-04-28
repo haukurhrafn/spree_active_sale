@@ -2,37 +2,77 @@
 require 'spec_helper'
 
 describe Spree::ProductsController, type: :controller do
-  let!(:user) { mock_model(Spree::User, :spree_api_key => 'fake', :last_incomplete_spree_order => nil) }
 
-  let(:active_sale_event) { create(:active_sale_event_for_product) }
-  let(:inactive_sale_event) { create(:inactive_sale_event_for_product) }
+  stub_authorization!
 
-  before do
-    controller.stub :spree_current_user => user
-    user.stub :has_spree_role? => true
-  end
+  let(:product) { mock_model(Spree::Product) }
+  let(:products) { [product] }
+  let(:taxon) { mock_model(Spree::Taxon) }
+  let(:user) { mock_model(Spree.user_class, :has_spree_role? => true, :last_incomplete_spree_order => nil, :spree_api_key => 'fake') }
+  let(:variant) { mock_model Spree::Variant }
+  let(:variants) { [variant] }
 
-  describe "GET show" do
-    context "when sale event is live and active" do
-      it "then product view page should be accessible" do
-        event = active_sale_event
-        product = event.products.first
-        event.live_and_active?.should be_true
-        product.live?.should be_true
-        spree_get :show, :id => product.to_param
-        response.should be_success
-        response.status.should == 200
+  describe '#show' do
+
+    before do
+      allow(Spree::Product).to receive(:with_deleted).and_return(products)
+      allow(controller).to receive(:spree_current_user).and_return(user)
+      allow(Spree::Variant).to receive_message_chain(:active, :includes, :where).and_return(variants)
+      allow(products).to receive_message_chain(:includes, :friendly, :find).and_return(product)
+      allow(product).to receive_message_chain(:taxons, :first).and_return(taxon)
+    end
+
+    context 'when product is live' do
+
+      before do
+        allow(product).to receive(:live?).and_return(true)
+      end
+
+      def send_request
+        spree_get :show, { id: product.to_param }
+      end
+
+      describe 'expect to receive' do
+        it { expect(controller).to receive(:spree_current_user).and_return(user) }
+        after { send_request }
+      end
+
+      it 'expects to assign' do
+        send_request
+        expect(assigns(:product)).to eq(product)
+        expect(assigns(:variants)).to eq(variants)
+        expect(assigns(:taxon)).to eq(taxon)
+      end
+
+      it 'expects to render template show' do
+        send_request
+        expect(response).to render_template :show
       end
     end
 
-    context "when sale event is not live and inactive" do
-      it "then product view page should not be accessible" do
-        event = inactive_sale_event
-        product = event.products.first
-        event.live_and_active?.should be_false
-        product.live?.should be_false
-        spree_get :show, :id => product.to_param
-        response.should redirect_to(spree.root_path)
+    context 'when product is not live' do
+
+      before do
+        allow(product).to receive(:live?).and_return(false)
+      end
+
+      def send_request
+        spree_get :show, { id: product.to_param }
+      end
+
+      describe 'expect to receive' do
+        it { expect(controller).to receive(:spree_current_user).and_return(user) }
+        after { send_request }
+      end
+
+      it 'expects to assign' do
+        send_request
+        expect(assigns(:product)).to eq(product)
+      end
+
+      it 'expects to redirect to root' do
+        send_request
+        expect(response).to  redirect_to root_path
       end
     end
   end

@@ -2,10 +2,10 @@
 
 <% unless @sale_images.any? %>
   <div class="no-objects-found">
-    <%= Spree.t('active_sale.event.no_image') %>
+    <%= Spree.t(:no_image, scope: [:active_sale, :event]) %>
   </div>
 <% else %>
-  <table class="index sortable" data-hook="images_table" data-sortable-link="<%= update_positions_admin_active_sale_active_sale_event_sale_images_url(@active_sale, @active_sale_event) %>">
+  <table class="table index sortable col-sm-12" data-hook="images_table" data-sortable-link="<%= update_positions_admin_active_sale_active_sale_event_sale_images_url(@active_sale, @active_sale_event) %>">
     <colgroup>
       <col style="width: 5%">
       <col style="width: 10%">
@@ -14,25 +14,26 @@
     </colgroup>
     <thead>
       <tr data-hook="images_header">
-        <th colspan="2"><%= Spree.t(:thumbnail) %></th>
-        <th><%= Spree.t(:alt_text) %></th>
+        <th></th>
+        <th><%= Spree.t(:thumbnail).capitalize %></th>
+        <th><%= Spree.t(:alt_text).capitalize %></th>
         <th class="actions"></th>
       </tr>
     </thead>
 
-    <tbody>
+    <tbody class="ui-sortable">
       <% @sale_images.each do |image| %>
         <tr id="<%= spree_dom_id image %>" data-hook="images_row" class="<%= cycle('odd', 'even')%>">
-          <td class="no-border">
-            <span class="handle"></span>
+          <td class="move-handle">
+            <span class="icon icon-sort handle ui-sortable-handle"></span>
           </td>
           <td>
             <%= link_to image_tag(image.attachment.url(:mini)), image.attachment.url(:original) %>
           </td>
           <td><%= image.alt %></td>
           <td class="actions">
-            <%= link_to_edit_url [:edit, :admin, @active_sale, @active_sale_event, image], :no_text => true %>
-            <%= link_to_delete image, { :url => [:admin, @active_sale, @active_sale_event, image], :no_text => true } %>
+            <%= link_to_edit_url [:edit, :admin, @active_sale, @active_sale_event, image], no_text: true %>
+            <%= link_to_delete image, { url: [:admin, @active_sale, @active_sale_event, image], no_text: true } %>
           </td>
         </tr>
       <% end %>

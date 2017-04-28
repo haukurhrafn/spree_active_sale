@@ -5,7 +5,7 @@ FactoryGirl.define do
   trait :inactive do
     is_active false
   end
-  
+
   trait :hidden do
     is_hidden true
   end
@@ -32,7 +32,7 @@ FactoryGirl.define do
       end
 
       after(:create) do |sale, evaluator|
-        FactoryGirl.create_list(:active_sale_event, evaluator.events_count, :active_sale => sale, :is_active => evaluator.active, :is_hidden => hidden, :is_permanent => permanent, :single_product_sale => single_product_sale)
+        FactoryGirl.create_list(:active_sale_event, evaluator.events_count, :active_sale => sale, :is_active => false, :is_hidden => evaluator.hidden, :is_permanent => false, :single_product_sale => evaluator.single_product_sale)
       end
 
       factory :inactive_sale_with_events, :traits => [:inactive]
@@ -47,7 +47,7 @@ FactoryGirl.define do
 
     # attributes
     sequence(:name) { |n| "Active Sale Event ##{n} - #{Kernel.rand(9999)}" }
-    description { Faker::Lorem.paragraphs(1 + Kernel.rand(5)).join("\n") }
+    description { FFaker::Lorem.paragraphs(1 + Kernel.rand(5)).join("\n") }
     sequence(:start_date) { |n| n < 1 ? 1.day.ago : n.days.ago }
     sequence(:end_date) { |n| n < 1 ? 1.day.from_now : n.days.from_now }
 

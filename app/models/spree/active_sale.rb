@@ -12,13 +12,15 @@ module Spree
     has_many :active_sale_events, -> { where(deleted_at: nil) }, dependent: :destroy
 
     validates :name, :permalink, presence: true
-    validates :permalink, uniqueness: { allow_blank: true }
+    validates :permalink, uniqueness: { allow_blank: true, case_sensitive: true }
 
     default_scope { order(position: :asc) }
 
-    self.whitelisted_ransackable_attributes = ['deleted_at']
+    alias :events :active_sale_events
+    alias :schedules :events
 
-    accepts_nested_attributes_for :active_sale_events, allow_destroy: true, reject_if: lambda { |attrs| attrs.all? { |k, v| v.blank? } }
+    self.whitelisted_ransackable_attributes = ['deleted_at']
+    accepts_nested_attributes_for :active_sale_events, allow_destroy: true, reject_if: :all_blank
 
     def self.config(&block)
       yield(Spree::ActiveSaleConfig)
@@ -27,17 +29,13 @@ module Spree
     # override the delete method to set deleted_at value
     # instead of actually deleting the sale.
     def delete
-      self.update_column(:deleted_at, Time.zone.now)
-      active_sale_events.update_all(deleted_at: Time.zone.now)
+      self.update_column(:deleted_at, Time.current)
+      active_sale_events.update_all(deleted_at: Time.current)
     end
 
     def to_param
       permalink.present? ? permalink : (permalink_was || name.to_s.to_url)
     end
 
-    def events
-      self.active_sale_events
-    end
-    alias :schedules :events
   end
 end

@@ -3,16 +3,15 @@ module Spree
     before_action :load_view_type
 
     def show
-      @taxon = Spree::Taxon.find_by_permalink!(params[:id])
+      @taxon = Taxon.friendly.find(params[:id])
       return unless @taxon
 
       if @taxon.live?
         @searcher = Spree::Config.searcher_class.new(params.merge(taxon: @taxon.id))
         @objects = @searcher.send(@retrieve_type) #retrieve_products
-
-        respond_with(@taxon)
+        @taxonomies = Spree::Taxonomy.includes(root: :children)
       else
-        redirect_to root_url, error: t('spree.active_sale.event.flash.error')
+        redirect_to root_path, error: Spree.t(:error, scope: [:active_sale, :event, :flash])
       end
     end
 

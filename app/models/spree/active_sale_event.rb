@@ -13,9 +13,8 @@ module Spree
     has_many :sale_properties, dependent: :destroy
     has_many :properties, through: :sale_properties
     belongs_to :active_sale
-
-    validates :name, :start_date, :end_date, :active_sale_id, presence: true
-    validate  :validate_start_and_end_date
+    validates :name, :start_date, :end_date, :active_sale, presence: true
+    validate  :validate_start_and_end_date, if: :invalid_dates?
     validate  :validate_with_live_event
 
     class << self
@@ -46,12 +45,12 @@ module Spree
     # override the delete method to set deleted_at value
     # instead of actually deleting the event.
     def delete
-      self.update_column(:deleted_at, object_zone_time)
+      update_column(:deleted_at, object_zone_time)
     end
 
     # return product's or sale's with prefix permalink
     def permalink
-      self.single_product_sale? && product.present? ? product : active_sale
+      single_product_sale? && product.present? ? product : active_sale
     end
 
     def product
@@ -59,45 +58,51 @@ module Spree
     end
 
     def live?(moment=object_zone_time)
-      (self.start_date <= moment && self.end_date >= moment) || self.is_permanent? if start_and_dates_available?
+      (start_date <= moment && end_date >= moment) || is_permanent? if start_and_dates_available?
     end
 
     def upcoming?(moment=object_zone_time)
-      (self.start_date >= moment && self.end_date > self.start_date) if start_and_dates_available?
+      (start_date >= moment && end_date > start_date) if start_and_dates_available?
     end
 
     def past?(moment=object_zone_time)
-      (self.start_date < moment && self.end_date > self.start_date && self.end_date < moment) if start_and_dates_available?
+      (start_date < moment && end_date > start_date && end_date < moment) if start_and_dates_available?
     end
 
     def live_and_active?(moment=nil)
-      self.live?(moment) && self.is_active?
+      live?(moment) && is_active?
     end
 
     def start_and_dates_available?
-      self.start_date && self.end_date
+      start_date && end_date
     end
 
     def invalid_dates?
-      self.start_and_dates_available? && (self.start_date >= self.end_date)
+      start_and_dates_available? && (start_date >= end_date)
+    end
+
+    def time_left
+      end_date - object_zone_time
     end
 
     private
 
       # check if there is start and end dates are correct
       def validate_start_and_end_date
-        errors.add(:start_date, I18n.t('spree.active_sale.event.validation.errors.invalid_dates')) if invalid_dates?
+        errors.add(:start_date, Spree.t('active_sale.event.validation.errors.invalid_dates'))
       end
 
       # check if there is no another event is currently live and active
       def validate_with_live_event
-        if !active_sale.active_sale_events.where('id != :id', {:id => self.id}).select{ |ase| ase.live? }.blank? && self.live?
-          errors.add(:another_event, I18n.t('spree.active_sale.event.validation.errors.live_event'))
+        if id.nil? && live? && !active_sale.active_sale_events.select{ |ase| ase.live? }.blank?
+          errors.add(:another_event, Spree.t('active_sale.event.validation.errors.live_event'))
+        elsif live? && !active_sale.active_sale_events.where.not(id: id).select{ |ase| ase.live? }.blank?
+          errors.add(:another_event, Spree.t('active_sale.event.validation.errors.live_event'))
         end
       end
 
       def object_zone_time
-        Time.zone.now
+        Time.current
       end
   end
 end
